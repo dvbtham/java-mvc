@@ -1,13 +1,13 @@
 package Views;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,9 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 public class CreateContactFrame extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	private JPanel buttonsPanel;
 	private JLabel lblHeadTitle;
@@ -165,6 +168,14 @@ public class CreateContactFrame extends JFrame {
 		buttonsPanel.add(btnExit);
 
 		btnShowData = new JButton("Show data");
+		btnShowData.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IndexUpdateFrame showData = new IndexUpdateFrame();
+				showData.setVisible(true);
+			}
+		});
 		buttonsPanel.add(btnShowData);
 
 		setBounds(100, 100, 450, 300);
