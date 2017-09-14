@@ -12,12 +12,12 @@ import Views.IndexUpdateFrame;
 
 public class ContactController implements ActionListener {
 	private ContactModel model;
-	private CreateContactFrame contactView;
+	private CreateContactFrame insertView;
 	private IndexUpdateFrame showDataView;
 
-	public ContactController(CreateContactFrame contactView) throws ClassNotFoundException {
-		this.contactView = contactView;
-		contactView.ButtonEvent(this);
+	public ContactController(CreateContactFrame insertView) throws ClassNotFoundException {
+		this.insertView = insertView;
+		insertView.ButtonEvent(this);
 	}
 
 	public ContactController(IndexUpdateFrame showDataView) throws ClassNotFoundException {
@@ -25,24 +25,49 @@ public class ContactController implements ActionListener {
 		model = new ContactModel();
 	}
 
-	private boolean isValid() {
-		if (contactView.getFirstName().equals("")) {
+	private boolean isInsertValid() {
+		if (insertView.getFirstName().equals("")) {
 			JOptionPane.showMessageDialog(null, "Firstname is reuired");
 			return false;
 		}
-		if (contactView.getLastName().equals("")) {
+		if (insertView.getLastName().equals("")) {
 			JOptionPane.showMessageDialog(null, "Lastname is reuired");
 			return false;
 		}
-		if (contactView.getTitle().equals("")) {
+		if (insertView.getTitle().equals("")) {
 			JOptionPane.showMessageDialog(null, "Title is reuired");
 			return false;
 		}
-		if (contactView.getOrigani().equals("")) {
+		if (insertView.getOrigani().equals("")) {
 			JOptionPane.showMessageDialog(null, "Origanization is reuired");
 			return false;
 		}
-		if (contactView.getContent().equals("")) {
+		if (insertView.getContent().equals("")) {
+			JOptionPane.showMessageDialog(null, "Content is reuired");
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean isUpdateValid() {
+		if (showDataView.getFirstName().equals("")) {
+			JOptionPane.showMessageDialog(null, "Firstname is reuired");
+			return false;
+		}
+		if (showDataView.getLastName().equals("")) {
+			JOptionPane.showMessageDialog(null, "Lastname is reuired");
+			return false;
+		}
+		if (showDataView.getTitle().equals("")) {
+			JOptionPane.showMessageDialog(null, "Title is reuired");
+			return false;
+		}
+		if (showDataView.getOrigani().equals("")) {
+			JOptionPane.showMessageDialog(null, "Origanization is reuired");
+			return false;
+		}
+		if (showDataView.getContent().equals("")) {
 			JOptionPane.showMessageDialog(null, "Content is reuired");
 			return false;
 		}
@@ -52,9 +77,9 @@ public class ContactController implements ActionListener {
 
 	public void Create() {
 		try {
-			if (isValid()) {
-				model = new ContactModel(contactView.getFirstName(), contactView.getLastName(), contactView.getTitle(),
-						contactView.getOrigani(), contactView.getContent());
+			if (isInsertValid()) {
+				model = new ContactModel(insertView.getFirstName(), insertView.getLastName(), insertView.getTitle(),
+						insertView.getOrigani(), insertView.getContent());
 				model.Insert();
 			}
 
@@ -95,28 +120,31 @@ public class ContactController implements ActionListener {
 			Create();
 			break;
 		case "create-exit":
-			this.contactView.dispose();
+			this.insertView.dispose();
 			break;
 
 		case "create-show":
 			IndexUpdateFrame frame = new IndexUpdateFrame();
 			this.showDataView = frame;
 			frame.ButtonEvent(this);
-			// this.contactView.dispose();
+			// this.insertView.dispose();
 			break;
 
 		case "update":
-			ContactModel c_model = null;
-			try {
-				c_model = new ContactModel(this.showDataView.getModel().getId(), this.showDataView.getFirstName(),
-						this.showDataView.getLastName(), this.showDataView.getTitle(), this.showDataView.getOrigani(),
-						this.showDataView.getContent());
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (isUpdateValid()) {
+				ContactModel c_model = null;
+				try {
+					c_model = new ContactModel(this.showDataView.getModel().getId(), this.showDataView.getFirstName(),
+							this.showDataView.getLastName(), this.showDataView.getTitle(),
+							this.showDataView.getOrigani(), this.showDataView.getContent());
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				c_model.Update(c_model.getId());
+				this.showDataView.LoadData(this);
+			} else {
+				JOptionPane.showMessageDialog(null, "Something went wrongs!!!");
 			}
-			c_model.Update(c_model.getId());
-			this.showDataView.LoadData(this);
 			break;
 
 		case "clear":
@@ -124,9 +152,16 @@ public class ContactController implements ActionListener {
 			break;
 
 		case "delete":
-			int id = this.showDataView.getModel().getId();
-			Delete(id);
-			this.showDataView.LoadData(this);
+			int option = JOptionPane.showConfirmDialog(null, "Are you sure that you want to delete this contact?",
+					"Delete contact", JOptionPane.YES_NO_OPTION);
+
+			if (option == JOptionPane.YES_OPTION) {
+				int id = this.showDataView.getModel().getId();
+				if (id > 0)
+					Delete(id);
+				else
+					JOptionPane.showMessageDialog(null, "Contact not found!!!");
+			}
 			break;
 
 		case "update-exit":

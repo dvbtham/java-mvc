@@ -48,9 +48,9 @@ public class ContactModel extends DbModel {
 
 	public void Update(int id) {
 		
-		String sql = "update contact set firstname = '" + this.FirstName + "', lastname = '" + this.LastName  + 
-				"', title = '" + this.Title + "', organi = '" + this.Organization + "', content = '" + 
-				this.Content + "' where id = " + id + ";";
+		String sql = "update contact set firstname = \"" + this.FirstName + "\", lastname = \"" + this.LastName  + 
+				"\", title = \"" + this.Title + "\", organi = \"" + this.Organization + "\", content = \"" + 
+				this.Content + "\" where id = " + id + ";";
 		this.CrudQuery(sql, "Update");
 	}
 
