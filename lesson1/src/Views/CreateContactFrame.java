@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -16,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import Controllers.ContactController;
 
 public class CreateContactFrame extends JFrame {
 	/**
@@ -50,6 +51,8 @@ public class CreateContactFrame extends JFrame {
 				try {
 					CreateContactFrame frame = new CreateContactFrame();
 					frame.setVisible(true);
+					ContactController contact = new ContactController(frame);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -168,14 +171,6 @@ public class CreateContactFrame extends JFrame {
 		buttonsPanel.add(btnExit);
 
 		btnShowData = new JButton("Show data");
-		btnShowData.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				IndexUpdateFrame showData = new IndexUpdateFrame();
-				showData.setVisible(true);
-			}
-		});
 		buttonsPanel.add(btnShowData);
 
 		setBounds(100, 100, 450, 300);
@@ -185,5 +180,30 @@ public class CreateContactFrame extends JFrame {
 		setSize(500, 500);
 
 	}
-
+	
+	public String getFirstName(){
+		return this.txtFirstname.getText();
+	}
+	public String getLastName(){
+		return this.txtLastname.getText();
+	}
+	public String getTitle(){
+		return this.txtTitle.getText();
+	}
+	public String getOrigani(){
+		return this.txtOrgani.getText();
+	}
+	public String getContent(){
+		return this.txtContent.getText();
+	}
+	
+	public void ButtonEvent(ActionListener listener){
+		btnInsert.setActionCommand("create-insert");
+		btnExit.setActionCommand("create-exit");
+		btnShowData.setActionCommand("create-show");
+		
+		btnInsert.addActionListener(listener);
+		btnExit.addActionListener(listener);
+		btnShowData.addActionListener(listener);
+	}
 }
