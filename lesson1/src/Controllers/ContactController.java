@@ -64,24 +64,16 @@ public class ContactController implements ActionListener {
 	}
 
 	public ResultSet GetContactList() {
-		return model.contactList();
-	}
-
-	public void Update(int id) {
-		if (model == null)
-			try {
-				int idContact = this.showDataView.getModel().getId();
-				String fn = this.showDataView.getModel().getFirstName();
-				String ln = this.showDataView.getModel().getLastName();
-				String title = this.showDataView.getModel().getTitle();
-				String origan = this.showDataView.getModel().getOrganization();
-				String content = this.showDataView.getModel().getContent();
-				model = new ContactModel(idContact, fn,ln, title,origan,content);
-				model.Update(id);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		if (model != null)
+			return model.contactList();
+		ResultSet res = null;
+		try {
+			res = new ContactModel().contactList();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return res;
 	}
 
 	public void Delete(int id) {
@@ -114,7 +106,16 @@ public class ContactController implements ActionListener {
 			break;
 
 		case "update":
-			Update(this.showDataView.getModel().getId());
+			ContactModel c_model = null;
+			try {
+				c_model = new ContactModel(this.showDataView.getModel().getId(), this.showDataView.getFirstName(),
+						this.showDataView.getLastName(), this.showDataView.getTitle(), this.showDataView.getOrigani(),
+						this.showDataView.getContent());
+			} catch (ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			c_model.Update(c_model.getId());
 			this.showDataView.LoadData(this);
 			break;
 
