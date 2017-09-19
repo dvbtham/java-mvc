@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/common/events/CaSiButtonEvents.java=UTF-8
 encoding//src/controllers/AlbumController.java=UTF-8
 encoding//src/controllers/HomeController.java=UTF-8
 encoding//src/views/albumFrame.java=UTF-8

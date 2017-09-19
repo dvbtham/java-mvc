@@ -43,19 +43,25 @@ public class AlbumModel extends DbModel {
 	public String getMaCaSi() {
 		return maCaSi;
 	}
-	
-	public boolean isExists(String id){
+
+	public String getIdByValue(String value) {
+		String query = "select id from casi where tencasi = \"" + value + "\";";
+		return db.GetIdByValue(query);
+	}
+
+	public boolean isExists(String id) {
 		String sql = "SELECT id FROM album WHERE id = \"" + id + "\";";
 		return this.CheckExists(sql);
 	}
-	
+
 	public ResultSet getAll() {
-		ResultSet res = db.SelectQuery("select id, tenalbum , sobaihat, DATE_FORMAT(ngaytao, '%d/%m/%Y'), macasi from album");
+		ResultSet res = db
+				.SelectQuery("select id, tenalbum , sobaihat, DATE_FORMAT(ngaytao, '%d/%m/%Y'), macasi from album");
 		return res;
 	}
 
 	public void Insert() {
-		String sql = "insert into album " + "values('" + this.id + "' , '" + this.tenAlbum + "', '" + this.soBaiHat
+		String sql = "insert into album values('" + this.id + "' , '" + this.tenAlbum + "', '" + this.soBaiHat
 				+ "', STR_TO_DATE('" + this.ngayTao + "', '%d/%m/%Y'), '" + this.maCaSi + "')";
 		this.CrudQuery(sql, "Insert");
 	}
@@ -63,7 +69,8 @@ public class AlbumModel extends DbModel {
 	public void Update(String id) {
 
 		String sql = "update album set tenalbum = \"" + this.tenAlbum + "\", sobaihat = \"" + this.soBaiHat
-				+ "\", ngaytao = STR_TO_DATE('" + this.ngayTao + "', '%d/%m/%Y'), macasi = \"ssf\" where id = \""+ id + "\";";
+				+ "\", ngaytao = STR_TO_DATE('" + this.ngayTao + "', '%d/%m/%Y'), macasi = \"" + this.maCaSi + "\" where id = \"" + id
+				+ "\";";
 		this.CrudQuery(sql, "Update");
 	}
 

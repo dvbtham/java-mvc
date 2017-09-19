@@ -1,6 +1,4 @@
 package views;
-
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -13,6 +11,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -21,7 +20,10 @@ import javax.swing.JTextField;
 
 import com.github.lgooddatepicker.components.DatePicker;
 
+import common.DatePickerSettingsHelper;
+import common.GroupButtonHelper;
 import common.constants;
+import models.CaSiModel;
 
 public class casiFrame extends JFrame {
 
@@ -41,28 +43,32 @@ public class casiFrame extends JFrame {
 	private JTextArea txtBio;
 	private JRadioButton rbNam;
 	private JRadioButton rbNu;
+	private ButtonGroup group;
 
 	private JButton btnSave;
 	private JButton btnCancel;
+	private CaSiModel model;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					casiFrame frame = new casiFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public void initGUI(CaSiModel model){
+		initGUI();
+		txtId.setText(model.getId());
+		txtId.setEnabled(false);
+		
+		txtTenCaSi.setText(model.getTencasi());
+		txtBio.setText(model.getGioithieu());
+		datePicker.setText(model.getNgaysinh());
+		
+		if(model.getGioitinh() == 1)
+			rbNam.setSelected(true);
+		else
+			rbNu.setSelected(true);
+		
+		
 	}
-
-	public casiFrame() {
-		super("Thêm mới ca sĩ");
+	public void initGUI(){
 		contentPanel = new JPanel(new GridBagLayout());
 		add(contentPanel);
-
+		
 		GridBagConstraints gc = new GridBagConstraints();
 		gc.fill = GridBagConstraints.NONE;
 		gc.gridx = 1;
@@ -114,7 +120,7 @@ public class casiFrame extends JFrame {
 		lblGioiTinh = new JLabel("Giới tính: ");
 		contentPanel.add(lblGioiTinh, gc);
 		
-		ButtonGroup group = new ButtonGroup();
+		group = new ButtonGroup();
 		
 		gc.gridx = 1;
 		gc.gridy = 3;
@@ -123,9 +129,11 @@ public class casiFrame extends JFrame {
 		contentPanel.add(rbPane, gc);
 		
 		rbNam = new JRadioButton("Nam");
+		rbNam.setName("1");
 		rbPane.add(rbNam);
 		
 		rbNu = new JRadioButton("Nữ");
+		rbNu.setName("0");
 		rbPane.add(rbNu);
 		
 		group.add(rbNam);
@@ -141,8 +149,9 @@ public class casiFrame extends JFrame {
 
 		gc.gridx = 1;
 		gc.gridy = 4;
-		gc.anchor = GridBagConstraints.LINE_START;
-		datePicker = new DatePicker();
+		gc.anchor = GridBagConstraints.LINE_START;		
+		datePicker = new DatePicker(new DatePickerSettingsHelper().getDatePickerSettings());
+		datePicker.setPreferredSize(new Dimension(223, 30));
 		contentPanel.add(datePicker, gc);
 
 		///////////// fifth row ///////////////////
@@ -178,20 +187,74 @@ public class casiFrame extends JFrame {
 		gc1.gridy = 0;
 		btnCancel = new JButton("Cancel");
 		buttonsPanel.add(btnCancel, gc1);
-
+		
 		setBounds(100, 100, 450, 400);
 		setContentPane(getContentPane());
 		setLayout(new FlowLayout(FlowLayout.CENTER));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(450, 400);
+
 	}
-
+	
+	
+	public casiFrame() {
+		super("Thêm mới ca sĩ");
+		
+		initGUI();
+	}
+	public casiFrame(CaSiModel model) {
+		super("Cập nhật ca sĩ " + model.getTencasi());
+		
+		this.model = model;
+		initGUI(model);
+	}
+	public CaSiModel getModel(){
+		return this.model;
+	}
+	public String getId(){
+		return txtId.getText();
+	}
+	public String getDate(){
+		return datePicker.getText();
+	}
+	public String getTenCaSi(){
+		return txtTenCaSi.getText();
+	}
+	public String getGioiThieu(){
+		return txtBio.getText();
+	}
+	public String getGioiTinh(){
+		return new GroupButtonHelper().getSelectedButtonText(group);
+	}
 	public void registerButtonEvents(ActionListener listener) {
-
-		btnSave.setActionCommand(constants.SAVE_ADD_CASI);
-		btnCancel.setActionCommand(constants.CANCEL_ADD_CASI);
+				
+		btnSave.setActionCommand(constants.SAVE_CASI);
+		btnCancel.setActionCommand(constants.CANCEL_CASI);
 
 		btnSave.addActionListener(listener);
 		btnCancel.addActionListener(listener);
+	}
+	public boolean validForm(){
+		if (txtId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải nhập Id");
+			return false;
+		}
+		if (txtTenCaSi.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải nhập tên ca sĩ");
+			return false;
+		}
+		if (new GroupButtonHelper().getSelectedButtonText(group).equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải chọn giới tính");
+			return false;
+		}
+		if (datePicker.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải chọn ngày sinh");
+			return false;
+		}
+		if (txtBio.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải giới thiệu về bản thân");
+			return false;
+		}
+		return true;
 	}
 }

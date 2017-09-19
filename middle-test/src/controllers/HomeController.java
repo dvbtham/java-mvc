@@ -4,10 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
-
-import common.closeWindows;
 import common.constants;
-import common.events.AlbumButtonEvents;
 import views.mainFrame;
 
 public class HomeController implements ActionListener {
@@ -21,15 +18,9 @@ public class HomeController implements ActionListener {
 
 		this.mainFrame = mainFrame;
 		this.mainFrame.RegisterButtonEvents(this);
-
 		this.albumFrame = albumFrame;
-		this.albumFrame.registerButtonEvents(new AlbumButtonEvents(this.albumFrame.AlbumModel(), albumFrame));
-
 		this.casiFrame = casiFrame;
-		this.casiFrame.registerButtonEvents(this);
-
 		this.baihatFrame = baihatFrame;
-		this.baihatFrame.registerButtonEvents(this);
 	}
 
 	@Override
@@ -41,12 +32,12 @@ public class HomeController implements ActionListener {
 
 		case constants.HOME_ADD_CASI:
 			this.casiFrame.setVisible(true);
-			CaSiController cs_control = new CaSiController(this.casiFrame);
+			
 			break;
 
 		case constants.HOME_ADD_BAIHAT:
 			this.baihatFrame.setVisible(true);
-			BaiHatController bh_control = new BaiHatController(this.baihatFrame);
+			
 			break;
 
 		case constants.HOME_DELETE_ALBUM:
@@ -54,13 +45,25 @@ public class HomeController implements ActionListener {
 			System.out.println(id);
 			if (!id.equals("0")) {
 				mainFrame.albumModel().Delete(id);
+				common.closeWindows.closeAll();
+				mainFrame.run();
 			} else {
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn album để xóa");
 			}
-
+						
 			break;
 
 		case constants.HOME_DELETE_CASI:
+			String casi_id = mainFrame.casiModel().getId();
+			System.out.println(casi_id);
+			if (!casi_id.equals("0")) {
+				mainFrame.casiModel().Delete(casi_id);
+				common.closeWindows.closeAll();
+				mainFrame.run();
+			} else {
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn ca sĩ để xóa");
+			}
+			
 			break;
 
 		case constants.HOME_DELETE_BAIHAT:

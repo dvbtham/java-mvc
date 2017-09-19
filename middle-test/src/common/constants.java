@@ -1,14 +1,14 @@
 package common;
 
 public class constants {
-	public static final String SAVE_ADD_ALBUM = "SAVE_ADD_ALBUM";  
-	public static final String CANCEL_ADD_ALBUM = "CANCEL_ADD_ALBUM";  
+	public static final String SAVE_ALBUM = "SAVE_ALBUM";  
+	public static final String CANCEL_ALBUM = "CANCEL_ALBUM";  
 	
-	public static final String SAVE_ADD_CASI = "SAVE_ADD_CASI";  
-	public static final String CANCEL_ADD_CASI = "CANCEL_ADD_CASI"; 
+	public static final String SAVE_CASI = "SAVE_CASI";  
+	public static final String CANCEL_CASI = "CANCEL_CASI"; 
 	
-	public static final String SAVE_ADD_BAIHAT = "SAVE_ADD_BAIHAT";  
-	public static final String CANCEL_ADD_BAIHAT = "CANCEL_ADD_BAIHA"; 
+	public static final String SAVE_BAIHAT = "SAVE_BAIHAT";  
+	public static final String CANCEL_BAIHAT = "CANCEL_BAIHAT"; 
 	
 	public static final String HOME_ADD_BAIHAT = "HOME_ADD_BAIHAT";  
 	public static final String HOME_DELETE_BAIHAT = "HOME_DELETE_BAIHAT"; 

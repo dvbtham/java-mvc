@@ -1,8 +1,6 @@
 package views;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,10 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-
-import com.github.lgooddatepicker.components.DatePicker;
-
 import common.constants;
 
 public class baihatFrame extends JFrame {
@@ -39,19 +33,6 @@ public class baihatFrame extends JFrame {
 
 	private JButton btnSave;
 	private JButton btnCancel;
-
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					baihatFrame frame = new baihatFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public baihatFrame() {
 		super("Thêm mới bài hát");
@@ -115,7 +96,7 @@ public class baihatFrame extends JFrame {
 		txtTheLoai = new JTextField(20);
 		txtTheLoai.setPreferredSize(new Dimension(20, 30));
 		contentPanel.add(txtTheLoai, gc);
-		
+
 		///////////// fourth row ///////////////////
 
 		gc.gridx = 0;
@@ -157,8 +138,8 @@ public class baihatFrame extends JFrame {
 
 	public void registerButtonEvents(ActionListener listener) {
 
-		btnSave.setActionCommand(constants.SAVE_ADD_BAIHAT);
-		btnCancel.setActionCommand(constants.CANCEL_ADD_BAIHAT);
+		btnSave.setActionCommand(constants.SAVE_BAIHAT);
+		btnCancel.setActionCommand(constants.CANCEL_BAIHAT);
 
 		btnSave.addActionListener(listener);
 		btnCancel.addActionListener(listener);

@@ -18,10 +18,10 @@ public class BaiHatController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			switch (e.getActionCommand()) {
-			case constants.SAVE_ADD_BAIHAT:
+			case constants.SAVE_BAIHAT:
 				break;
 				
-			case constants.CANCEL_ADD_BAIHAT:
+			case constants.CANCEL_BAIHAT:
 				baihatFrame.dispose();
 				break;
 			}

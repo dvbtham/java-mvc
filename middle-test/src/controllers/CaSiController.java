@@ -1,31 +1,19 @@
 package controllers;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import common.constants;
+import java.sql.ResultSet;
+import common.events.CaSiButtonEvents;
+import models.CaSiModel;
 
 public class CaSiController {
 	private views.casiFrame casiFrame;
+	private CaSiModel model;
 
-	public CaSiController(views.casiFrame casiFrame) {
+	public CaSiController(views.casiFrame casiFrame) throws ClassNotFoundException {
 		this.casiFrame = casiFrame;
-		this.casiFrame.registerButtonEvents(new CaSiButtonEvents());
+		model = new CaSiModel();
+		this.casiFrame.registerButtonEvents(new CaSiButtonEvents(this.casiFrame.getModel(), casiFrame));
 	}
 
-	class CaSiButtonEvents implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			switch (e.getActionCommand()) {
-			case constants.SAVE_ADD_CASI:
-				break;
-
-			case constants.CANCEL_ADD_CASI:
-				casiFrame.dispose();
-				break;
-			}
-		}
-
+	public ResultSet getAll() {
+		return model.getAll();
 	}
 }

@@ -54,6 +54,21 @@ public class DbModel {
 		}
 		return false;
 	}
+	
+	protected String GetIdByValue(String query) {
+		ResultSet res = null;
+		try {
+			Statement stm = con.createStatement();
+			res = stm.executeQuery(query);
+			while(res.next()){				
+				return res.getString("id");
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error has occurred while connecting to database!!!");
+		}
+		return null;
+	}
 
 	protected void CrudQuery(String query, String action) {
 		try {
@@ -65,5 +80,20 @@ public class DbModel {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, "An error has occurred!!!");
 		}
+	}
+
+	public String getNameById(String sql, String colunmName) {
+		ResultSet res = null;
+		try {
+			Statement stm = con.createStatement();
+			res = stm.executeQuery(sql);
+			while(res.next()){				
+				return res.getString(colunmName);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error has occurred while connecting to database!!!");
+		}
+		return null;
 	}
 }

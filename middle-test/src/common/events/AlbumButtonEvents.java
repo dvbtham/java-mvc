@@ -2,19 +2,17 @@ package common.events;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javax.swing.JOptionPane;
-
 import common.constants;
+import controllers.AlbumController;
 import models.AlbumModel;
 import views.albumFrame;
+import views.mainFrame;
 
 public class AlbumButtonEvents implements ActionListener {
 	private AlbumModel albumModel;
 	private albumFrame frame;
 
 	public AlbumButtonEvents(AlbumModel albumModel, albumFrame frame) {
-		this.albumModel = albumModel;
 		this.albumModel = albumModel;
 		this.frame = frame;
 	}
@@ -23,15 +21,16 @@ public class AlbumButtonEvents implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
 
-		case constants.SAVE_ADD_ALBUM:
+		case constants.SAVE_ALBUM:
 			try {
-				if (this.frame.ValidForm()) {
+				if (this.frame.validForm()) {
 					albumModel = new AlbumModel(frame.Id(), frame.TenAlbum(), frame.SoBaiHat(), frame.NgayTao(), frame.MaCaSi());
 					if(!albumModel.isExists(frame.Id()))
 						albumModel.Insert();
 					else
 						albumModel.Update(frame.Id());
-					frame.dispose();
+					common.closeWindows.closeAll();
+					mainFrame.run();
 				}
 
 			} catch (ClassNotFoundException e1) {
@@ -40,7 +39,7 @@ public class AlbumButtonEvents implements ActionListener {
 			}
 			break;
 
-		case constants.CANCEL_ADD_ALBUM:
+		case constants.CANCEL_ALBUM:			
 			frame.dispose();
 			break;
 		}
