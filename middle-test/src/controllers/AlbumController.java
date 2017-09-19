@@ -1,18 +1,36 @@
 package controllers;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
+import javax.swing.JOptionPane;
+
+import common.events.AlbumButtonEvents;
+import models.AlbumModel;
 public class AlbumController {
-	public AlbumController() {
-		
-	}
-}
-class AlbumButtonEvents implements ActionListener{
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
+	private AlbumModel albumModel;
+	private views.albumFrame albumFrame;
+
+	public AlbumController(views.albumFrame albumFrame) {
+		try {
+			albumModel = new AlbumModel();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.albumFrame = albumFrame;
+	}
+	public ResultSet getAll(){
+		return albumModel.getAll();
+	}
+	
+	public AlbumController() {
+		try {
+			albumModel = new AlbumModel();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

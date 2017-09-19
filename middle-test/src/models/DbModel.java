@@ -39,6 +39,21 @@ public class DbModel {
 		}
 		return res;
 	}
+	
+	protected boolean CheckExists(String query) {
+		ResultSet res = null;
+		try {
+			Statement stm = con.createStatement();
+			res = stm.executeQuery(query);
+			if(res.next()){
+				return true;
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "An error has occurred while connecting to database!!!");
+		}
+		return false;
+	}
 
 	protected void CrudQuery(String query, String action) {
 		try {

@@ -64,7 +64,7 @@ public class baihatFrame extends JFrame {
 		gc.gridy = 0;
 		gc.weightx = 0.1;
 		gc.weighty = 1;
-		lblHeadTitle = new JLabel("THÔNG TIN VỀ ALBUM");
+		lblHeadTitle = new JLabel("THÔNG TIN BÀI HÁT");
 		contentPanel.add(lblHeadTitle, gc);
 
 		///////////// first row ///////////////////
