@@ -1,31 +1,27 @@
 package controllers;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
-import common.constants;
+import common.events.BaiHatButtonEvents;
+import models.BaiHatModel;
 
 public class BaiHatController {
 	private views.baihatFrame baihatFrame;
+	private BaiHatModel model;
 
 	public BaiHatController(views.baihatFrame baihatFrame) {
-		this.baihatFrame = baihatFrame;
-		this.baihatFrame.registerButtonEvents(new BaiHatButtonEvents());
-	}
-
-	class BaiHatButtonEvents implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			switch (e.getActionCommand()) {
-			case constants.SAVE_BAIHAT:
-				break;
-				
-			case constants.CANCEL_BAIHAT:
-				baihatFrame.dispose();
-				break;
-			}
+		try {
+			model = new BaiHatModel();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-
+		this.baihatFrame = baihatFrame;
+		this.baihatFrame.registerButtonEvents(new BaiHatButtonEvents(baihatFrame.getModel(), this.baihatFrame));
 	}
+	
+	public ResultSet getAll(){
+		return model.getAll();
+	}
+		
 }

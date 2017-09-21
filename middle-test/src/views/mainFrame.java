@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import common.events.AlbumButtonEvents;
 import common.events.CaSiButtonEvents;
 import controllers.AlbumController;
+import controllers.BaiHatController;
 import controllers.CaSiController;
 import controllers.HomeController;
 import models.AlbumModel;
@@ -67,17 +68,19 @@ public class mainFrame extends JFrame {
 	public BaiHatModel baihatModel() {
 		return this.baihatModel;
 	}
-	public static void run(){
+	public static void startFrame(){
 		mainFrame frame = new mainFrame();
 
 		albumFrame albumFrame = new albumFrame();
 		casiFrame casiFrame = new casiFrame();
 		baihatFrame baihatFrame = new baihatFrame();
+		@SuppressWarnings("unused")
 		HomeController homeController = new HomeController(frame, albumFrame, casiFrame, baihatFrame);
 
 		try {
 			frame.albumTable(new AlbumController(albumFrame));
 			frame.casiTable(new CaSiController(casiFrame));
+			frame.baihatTable(new BaiHatController(baihatFrame));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -87,7 +90,7 @@ public class mainFrame extends JFrame {
 		frame.setVisible(true);
 	}
 	public static void main(String[] args) throws ClassNotFoundException {
-		run();
+		startFrame();
 	}
 
 	public void albumTable(AlbumController controller) {
@@ -138,7 +141,7 @@ public class mainFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					System.out.println(tencasi);
+
 					frame.setSelectedIndexCbb(frame.getDefaultModel().getIndexOf(tencasi));
 					frame.registerButtonEvents(new AlbumButtonEvents(albumModel, frame));
 					frame.setVisible(true);
@@ -324,12 +327,26 @@ public class mainFrame extends JFrame {
 
 	}
 
-	private void baihatTable() {
+	private void baihatTable(BaiHatController controller) {
 		String[] headerColunms = { "Mã bài hát", "Tên bài hát", "Thể loại", "Album" };
 		baihatTable = new JTable();
 		baihatDTable = new DefaultTableModel();
 		baihatDTable.setColumnIdentifiers(headerColunms);
 		baihatTable.setModel(baihatDTable);
+		ResultSet result = controller.getAll();
+		try {
+			while (result.next()) {
+				String rows[] = new String[5];
+				rows[0] = result.getString(1);
+				rows[1] = result.getString(2);
+				rows[2] = result.getString(3);
+				rows[3] = result.getString(4);
+				baihatDTable.addRow(rows);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		baihatTable.setFillsViewportHeight(true);
 		baihatTable.setBorder(BorderFactory.createEtchedBorder());
 		baihatTable.setPreferredScrollableViewportSize(new Dimension(500, 200));

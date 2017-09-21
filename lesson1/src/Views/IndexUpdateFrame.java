@@ -67,7 +67,7 @@ public class IndexUpdateFrame extends JFrame {
 		tableBinding(tModel, contactController.GetContactList());
 		table.setFillsViewportHeight(true);
 		table.setBorder(BorderFactory.createEtchedBorder());
-		table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		table.setPreferredScrollableViewportSize(new Dimension(500, 130));
 		table.addMouseListener(new MouseListener() {
 
 			@Override

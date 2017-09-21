@@ -32,7 +32,7 @@ public class CaSiButtonEvents implements ActionListener {
 					else
 						model.Update(model.getId());
 					common.closeWindows.closeAll();
-					mainFrame.run();
+					mainFrame.startFrame();
 				}
 
 			} catch (ClassNotFoundException e1) {

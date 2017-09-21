@@ -2,8 +2,6 @@ package models;
 
 import java.sql.ResultSet;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
 public class CaSiModel extends DbModel {
 
 	private String id, tencasi, ngaysinh, gioithieu;
@@ -44,6 +42,11 @@ public class CaSiModel extends DbModel {
 
 	public String getId() {
 		return this.id;
+	}
+	
+	public String getIdByValue(String value) {
+		String query = "select id from album where tenalbum = \"" + value + "\";";
+		return db.GetIdByValue(query);
 	}
 	
 	public String getNameById(String id) {

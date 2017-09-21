@@ -6,14 +6,23 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import common.constants;
+import models.AlbumModel;
+import models.BaiHatModel;
+import models.CaSiModel;
 
 public class baihatFrame extends JFrame {
 
@@ -29,13 +38,27 @@ public class baihatFrame extends JFrame {
 	private JTextField txtId;
 	private JTextField txtTenBaiHat;
 	private JTextField txtTheLoai;
-	private JComboBox cbbAlbum;
+	private JComboBox<String> cbbAlbum;
 
 	private JButton btnSave;
 	private JButton btnCancel;
-
-	public baihatFrame() {
-		super("Thêm mới bài hát");
+	private BaiHatModel model;
+	private String maalbum;
+	DefaultComboBoxModel<String> defaultModel;
+	
+	public void setSelectedIndexCbb(int index){
+		cbbAlbum.setSelectedIndex(index);
+	}
+	
+	public BaiHatModel getModel(){
+		return model;
+	}
+	
+	public void initGUI(BaiHatModel model){
+		initGUI();
+	}
+	
+	public void initGUI(){
 		contentPanel = new JPanel(new GridBagLayout());
 		add(contentPanel);
 
@@ -102,14 +125,40 @@ public class baihatFrame extends JFrame {
 		gc.gridx = 0;
 		gc.gridy = 4;
 		gc.anchor = GridBagConstraints.LINE_END;
-		lblAlbum = new JLabel("Album:");
+		lblAlbum = new JLabel("Album:");		
 		contentPanel.add(lblAlbum, gc);
 
 		gc.gridx = 1;
 		gc.gridy = 4;
 		gc.anchor = GridBagConstraints.LINE_START;
-		String[] casi = { "Sơn Tùng M-TP", "Chi Dân", "Issac", "Will" };
-		cbbAlbum = new JComboBox(casi);
+		ResultSet res = null;
+		defaultModel = new DefaultComboBoxModel<String>();
+		try {
+			res = new AlbumModel().getAll();
+			while (res.next()) {
+				defaultModel.addElement(res.getString("tenalbum"));					
+			}
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		cbbAlbum = new JComboBox<String>(defaultModel);
+		cbbAlbum.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				String tenAlbum = (String)cbbAlbum.getSelectedItem();
+		        try {
+					maalbum = new CaSiModel().getIdByValue(tenAlbum);
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		contentPanel.add(cbbAlbum, gc);
 
 		///////////// six row ///////////////////
@@ -134,6 +183,59 @@ public class baihatFrame extends JFrame {
 		setLayout(new FlowLayout(FlowLayout.CENTER));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(450, 300);
+	}
+
+	public DefaultComboBoxModel<String> getDefaultModel() {
+		return defaultModel;
+	}
+	
+	public boolean validForm() {
+		if (txtId.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải nhập mã bài hát");
+			return false;
+		}
+		if (txtTenBaiHat.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải nhập tên bài hát");
+			return false;
+		}
+
+		if (txtTheLoai.getText().equals("")) {
+			JOptionPane.showMessageDialog(null, "Bạn phải nhập thể loại");
+			return false;
+		}
+
+		if (maalbum == "") {
+			JOptionPane.showMessageDialog(null, "Bạn phải chọn ca sĩ");
+			return false;
+		}
+
+		return true;
+	}
+	
+	public baihatFrame() {
+		super("Thêm mới bài hát");
+		initGUI();
+	}
+	public baihatFrame(BaiHatModel model) {
+		super("Cập nhật bài hát " + model);
+		this.model = model;
+		initGUI(model);
+	}
+	
+	public String getId(){
+		return txtId.getText();
+	}
+	
+	public String getTenBaiHat(){
+		return txtTenBaiHat.getText();
+	}
+	
+	public String getTheLoai(){
+		return txtTheLoai.getText();
+	}
+	
+	public String getMaAlbum(){
+		return maalbum;
 	}
 
 	public void registerButtonEvents(ActionListener listener) {

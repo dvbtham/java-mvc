@@ -23,6 +23,7 @@ public class HomeController implements ActionListener {
 		this.baihatFrame = baihatFrame;
 	}
 
+	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
@@ -46,7 +47,7 @@ public class HomeController implements ActionListener {
 			if (!id.equals("0")) {
 				mainFrame.albumModel().Delete(id);
 				common.closeWindows.closeAll();
-				mainFrame.run();
+				mainFrame.startFrame();
 			} else {
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn album để xóa");
 			}
@@ -59,7 +60,7 @@ public class HomeController implements ActionListener {
 			if (!casi_id.equals("0")) {
 				mainFrame.casiModel().Delete(casi_id);
 				common.closeWindows.closeAll();
-				mainFrame.run();
+				mainFrame.startFrame();
 			} else {
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn ca sĩ để xóa");
 			}

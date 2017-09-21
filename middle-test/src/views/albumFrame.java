@@ -10,8 +10,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -51,10 +49,6 @@ public class albumFrame extends JFrame {
 	private String macasi;
 	DefaultComboBoxModel<String> defaultModel;
 	
-	
-	public int currentIndex = 0;
-	
-
 	public String Id() {
 		return txtId.getText();
 	}

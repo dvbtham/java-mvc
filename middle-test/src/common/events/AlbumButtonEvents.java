@@ -3,7 +3,6 @@ package common.events;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import common.constants;
-import controllers.AlbumController;
 import models.AlbumModel;
 import views.albumFrame;
 import views.mainFrame;
@@ -30,7 +29,7 @@ public class AlbumButtonEvents implements ActionListener {
 					else
 						albumModel.Update(frame.Id());
 					common.closeWindows.closeAll();
-					mainFrame.run();
+					mainFrame.startFrame();
 				}
 
 			} catch (ClassNotFoundException e1) {
