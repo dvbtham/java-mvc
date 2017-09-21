@@ -26,12 +26,14 @@ public class BaiHatButtonEvents implements ActionListener{
 					model = new BaiHatModel(frame.getId(), frame.getTenBaiHat(), frame.getTheLoai(), frame.getMaAlbum());
 					if(!model.isExists(frame.getId())){
 						model.Insert();
+						closeWindows.closeAll();
+						mainFrame.startFrame();
 					}
 					else{
 						model.Update(frame.getId());
+						closeWindows.closeAll();
+						mainFrame.startFrame();
 					}
-					closeWindows.closeAll();
-					mainFrame.startFrame();
 				
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block

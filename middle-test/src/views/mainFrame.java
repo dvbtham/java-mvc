@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -20,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import common.events.AlbumButtonEvents;
+import common.events.BaiHatButtonEvents;
 import common.events.CaSiButtonEvents;
 import controllers.AlbumController;
 import controllers.BaiHatController;
@@ -96,6 +95,7 @@ public class mainFrame extends JFrame {
 	public void albumTable(AlbumController controller) {
 		String[] headerColunms = { "Id", "Tên album", "Số bài hát", "Ngày tạo", "Ca sĩ" };
 		albumTable = new JTable();
+		
 		albumDTable = new DefaultTableModel();
 		albumDTable.setColumnIdentifiers(headerColunms);
 		albumTable.setModel(albumDTable);
@@ -148,36 +148,8 @@ public class mainFrame extends JFrame {
 				}
 			}
 		});
-		albumTable.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				clickTable(albumTable);
-			}
-		});
+		albumTable.getTableHeader().setReorderingAllowed(false);
+		albumTable.setToolTipText("Nhấn Enter để đi tới màn hình cập nhật");
 		albumTable.setFillsViewportHeight(true);
 		albumTable.setBorder(BorderFactory.createEtchedBorder());
 		albumTable.setPreferredScrollableViewportSize(new Dimension(500, 200));
@@ -189,11 +161,25 @@ public class mainFrame extends JFrame {
 		int row = table.getSelectedRow();
 		try {
 			this.casiModel = new CaSiModel(
+					String.valueOf(table.getModel().getValueAt(row, 0)),
+					String.valueOf(table.getModel().getValueAt(row, 1)), 
+					Integer.parseInt(String.valueOf(table.getModel().getValueAt(row, 2))),
+					String.valueOf(table.getModel().getValueAt(row, 3)), 
+					String.valueOf(table.getModel().getValueAt(row, 4)));
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void clickBaiHatTable(JTable table) {
+		int row = table.getSelectedRow();
+		try {
+			this.baihatModel = new BaiHatModel(
 					String.valueOf(table.getValueAt(row, 0)),
 					String.valueOf(table.getValueAt(row, 1)), 
-					Integer.parseInt(String.valueOf(table.getValueAt(row, 2))),
-					String.valueOf(table.getValueAt(row, 3)), 
-					String.valueOf(table.getValueAt(row, 4)));
+					String.valueOf(table.getValueAt(row, 2)), 
+					String.valueOf(table.getValueAt(row, 3)));
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -289,36 +275,9 @@ public class mainFrame extends JFrame {
 				}
 			}
 		});
-		casiTable.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				clickCaSiTable(casiTable);
-			}
-		});
+				
+		casiTable.getTableHeader().setReorderingAllowed(false);
+		casiTable.setToolTipText("Nhấn Enter đi tới màn hình cập nhật");
 		casiTable.setFillsViewportHeight(true);
 		casiTable.setBorder(BorderFactory.createEtchedBorder());
 		casiTable.setPreferredScrollableViewportSize(new Dimension(500, 200));
@@ -347,6 +306,43 @@ public class mainFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		baihatTable.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					clickBaiHatTable(baihatTable);
+					baihatFrame frame = new baihatFrame(baihatModel);
+					String tenalbum = "";
+					try {
+						tenalbum = new AlbumModel().getNameById(baihatModel.getMaalbum());
+					} catch (ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					frame.setSelectedIndexCbb(frame.getDefaultModel().getIndexOf(tenalbum));
+					frame.registerButtonEvents(new BaiHatButtonEvents(baihatModel, frame));
+					frame.setVisible(true);
+				}
+			}
+		});
+		
+		baihatTable.getTableHeader().setReorderingAllowed(false);
+		baihatTable.setToolTipText("Nhấn Enter đi tới màn hình cập nhật");
 		baihatTable.setFillsViewportHeight(true);
 		baihatTable.setBorder(BorderFactory.createEtchedBorder());
 		baihatTable.setPreferredScrollableViewportSize(new Dimension(500, 200));

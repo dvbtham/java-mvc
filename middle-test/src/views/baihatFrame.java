@@ -45,20 +45,27 @@ public class baihatFrame extends JFrame {
 	private BaiHatModel model;
 	private String maalbum;
 	DefaultComboBoxModel<String> defaultModel;
-	
-	public void setSelectedIndexCbb(int index){
+
+	public void setSelectedIndexCbb(int index) {
 		cbbAlbum.setSelectedIndex(index);
 	}
-	
-	public BaiHatModel getModel(){
+
+	public BaiHatModel getModel() {
 		return model;
 	}
-	
-	public void initGUI(BaiHatModel model){
+
+	public void initGUI(BaiHatModel model) {
 		initGUI();
+		
+		txtId.setEnabled(false);
+		txtId.setText(model.getMabaihat());
+		
+		txtTenBaiHat.setText(model.getTenbaihat());
+		
+		txtTheLoai.setText(model.getTheloai());
 	}
-	
-	public void initGUI(){
+
+	public void initGUI() {
 		contentPanel = new JPanel(new GridBagLayout());
 		add(contentPanel);
 
@@ -125,7 +132,7 @@ public class baihatFrame extends JFrame {
 		gc.gridx = 0;
 		gc.gridy = 4;
 		gc.anchor = GridBagConstraints.LINE_END;
-		lblAlbum = new JLabel("Album:");		
+		lblAlbum = new JLabel("Album:");
 		contentPanel.add(lblAlbum, gc);
 
 		gc.gridx = 1;
@@ -136,7 +143,7 @@ public class baihatFrame extends JFrame {
 		try {
 			res = new AlbumModel().getAll();
 			while (res.next()) {
-				defaultModel.addElement(res.getString("tenalbum"));					
+				defaultModel.addElement(res.getString("tenalbum"));
 			}
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -150,8 +157,8 @@ public class baihatFrame extends JFrame {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				String tenAlbum = (String)cbbAlbum.getSelectedItem();
-		        try {
+				String tenAlbum = (String) cbbAlbum.getSelectedItem();
+				try {
 					maalbum = new CaSiModel().getIdByValue(tenAlbum);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
@@ -159,6 +166,7 @@ public class baihatFrame extends JFrame {
 				}
 			}
 		});
+		
 		contentPanel.add(cbbAlbum, gc);
 
 		///////////// six row ///////////////////
@@ -188,7 +196,7 @@ public class baihatFrame extends JFrame {
 	public DefaultComboBoxModel<String> getDefaultModel() {
 		return defaultModel;
 	}
-	
+
 	public boolean validForm() {
 		if (txtId.getText().equals("")) {
 			JOptionPane.showMessageDialog(null, "Bạn phải nhập mã bài hát");
@@ -211,30 +219,31 @@ public class baihatFrame extends JFrame {
 
 		return true;
 	}
-	
+
 	public baihatFrame() {
 		super("Thêm mới bài hát");
 		initGUI();
 	}
+
 	public baihatFrame(BaiHatModel model) {
 		super("Cập nhật bài hát " + model);
 		this.model = model;
 		initGUI(model);
 	}
-	
-	public String getId(){
+
+	public String getId() {
 		return txtId.getText();
 	}
-	
-	public String getTenBaiHat(){
+
+	public String getTenBaiHat() {
 		return txtTenBaiHat.getText();
 	}
-	
-	public String getTheLoai(){
+
+	public String getTheLoai() {
 		return txtTheLoai.getText();
 	}
-	
-	public String getMaAlbum(){
+
+	public String getMaAlbum() {
 		return maalbum;
 	}
 

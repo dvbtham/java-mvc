@@ -31,7 +31,7 @@ public class BaiHatModel extends DbModel{
 		db= new DbModel();
 		this.maalbum = maalbum;
 		this.tenbaihat = tenbaihat;
-		this.mabaihat = maalbum;
+		this.mabaihat = mabaihat;
 		this.theloai = theloai;
 	}
 	
@@ -52,14 +52,14 @@ public class BaiHatModel extends DbModel{
 
 	public void Update(String id) {
 
-		String sql = "update album set tenbaihat = \"" + this.tenbaihat + "\", theloai = \"" + this.theloai
-				+ "\", maalbum = \"" + this.maalbum + "\" where id = \"" + id
+		String sql = "update baihat set tenbaihat = \"" + this.tenbaihat + "\", theloai = \"" + this.theloai
+				+ "\", maalbum = \"" + this.maalbum + "\" where mabaihat = \"" + id
 				+ "\";";
 		this.CrudQuery(sql, "Update");
 	}
 
 	public void Delete(String id) {
-		String sql = "DELETE FROM baihat WHERE id = \"" + id + "\";";
+		String sql = "DELETE FROM baihat WHERE mabaihat = \"" + id + "\";";
 		this.CrudQuery(sql, "Delete");
 	}
 }

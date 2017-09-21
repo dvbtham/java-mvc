@@ -43,7 +43,6 @@ public class HomeController implements ActionListener {
 
 		case constants.HOME_DELETE_ALBUM:
 			String id = mainFrame.albumModel().getId();
-			System.out.println(id);
 			if (!id.equals("0")) {
 				mainFrame.albumModel().Delete(id);
 				common.closeWindows.closeAll();
@@ -56,7 +55,6 @@ public class HomeController implements ActionListener {
 
 		case constants.HOME_DELETE_CASI:
 			String casi_id = mainFrame.casiModel().getId();
-			System.out.println(casi_id);
 			if (!casi_id.equals("0")) {
 				mainFrame.casiModel().Delete(casi_id);
 				common.closeWindows.closeAll();
@@ -68,6 +66,14 @@ public class HomeController implements ActionListener {
 			break;
 
 		case constants.HOME_DELETE_BAIHAT:
+			String baihat_id = mainFrame.baihatModel().getMabaihat();
+			if (!baihat_id.equals("0")) {
+				mainFrame.baihatModel().Delete(baihat_id);
+				common.closeWindows.closeAll();
+				mainFrame.startFrame();
+			} else {
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn bài hát để xóa");
+			}
 			break;
 
 		}
