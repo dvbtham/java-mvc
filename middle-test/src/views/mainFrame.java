@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -51,10 +53,14 @@ public class mainFrame extends JFrame {
 	private DefaultTableModel baihatDTable;
 	private JButton baihatInsert;
 	private JButton baihatDelete;
-	
+
 	private AlbumModel albumModel;
 	private CaSiModel casiModel;
 	private BaiHatModel baihatModel;
+
+	public boolean albumTableClicked = false;
+	public boolean casiTableClicked = false;
+	public boolean baihatTableClicked = false;
 
 	public AlbumModel albumModel() {
 		return this.albumModel;
@@ -67,7 +73,8 @@ public class mainFrame extends JFrame {
 	public BaiHatModel baihatModel() {
 		return this.baihatModel;
 	}
-	public static void startFrame(){
+
+	public static void startFrame() {
 		mainFrame frame = new mainFrame();
 
 		albumFrame albumFrame = new albumFrame();
@@ -84,10 +91,10 @@ public class mainFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
 		frame.setVisible(true);
 	}
+
 	public static void main(String[] args) throws ClassNotFoundException {
 		startFrame();
 	}
@@ -95,7 +102,7 @@ public class mainFrame extends JFrame {
 	public void albumTable(AlbumController controller) {
 		String[] headerColunms = { "Id", "Tên album", "Số bài hát", "Ngày tạo", "Ca sĩ" };
 		albumTable = new JTable();
-		
+
 		albumDTable = new DefaultTableModel();
 		albumDTable.setColumnIdentifiers(headerColunms);
 		albumTable.setModel(albumDTable);
@@ -107,14 +114,57 @@ public class mainFrame extends JFrame {
 				rows[1] = result.getString(2);
 				rows[2] = result.getString(3);
 				rows[3] = result.getString(4);
-				rows[4] = result.getString(5);
+
+				String singerId = result.getString(5);
+				String singerName = "";
+				try {
+					singerName = new CaSiModel().getNameById(singerId);
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				rows[4] = singerName;
 				albumDTable.addRow(rows);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		albumTable.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				clickAlbumTable(albumTable);
+			}
+		});
+
 		albumTable.addKeyListener(new KeyListener() {
 
 			@Override
@@ -132,7 +182,7 @@ public class mainFrame extends JFrame {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					clickTable(albumTable);
+					clickAlbumTable(albumTable);
 					albumFrame frame = new albumFrame(albumModel);
 					String tencasi = "";
 					try {
@@ -160,39 +210,43 @@ public class mainFrame extends JFrame {
 	private void clickCaSiTable(JTable table) {
 		int row = table.getSelectedRow();
 		try {
-			this.casiModel = new CaSiModel(
-					String.valueOf(table.getModel().getValueAt(row, 0)),
-					String.valueOf(table.getModel().getValueAt(row, 1)), 
-					Integer.parseInt(String.valueOf(table.getModel().getValueAt(row, 2))),
-					String.valueOf(table.getModel().getValueAt(row, 3)), 
+			String gender = table.getModel().getValueAt(row, 2) + "";
+			String genderId = gender.equals("Nam") ? "1" : "0";
+			this.casiModel = new CaSiModel(String.valueOf(table.getModel().getValueAt(row, 0)),
+					String.valueOf(table.getModel().getValueAt(row, 1)), Integer.parseInt(genderId),
+					String.valueOf(table.getModel().getValueAt(row, 3)),
 					String.valueOf(table.getModel().getValueAt(row, 4)));
+			casiTableClicked = true;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void clickBaiHatTable(JTable table) {
 		int row = table.getSelectedRow();
 		try {
-			this.baihatModel = new BaiHatModel(
-					String.valueOf(table.getValueAt(row, 0)),
-					String.valueOf(table.getValueAt(row, 1)), 
-					String.valueOf(table.getValueAt(row, 2)), 
+			this.baihatModel = new BaiHatModel(String.valueOf(table.getValueAt(row, 0)),
+					String.valueOf(table.getValueAt(row, 1)), String.valueOf(table.getValueAt(row, 2)),
 					String.valueOf(table.getValueAt(row, 3)));
+			baihatTableClicked = true;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	private void clickTable(JTable table) {
+	private void clickAlbumTable(JTable table) {
 		int row = table.getSelectedRow();
-
+		
 		try {
+			String singerName = String.valueOf(table.getValueAt(row, 4));
+			String singerId = new CaSiModel().getSingerIdByName(singerName);
 			this.albumModel = new AlbumModel(String.valueOf(table.getValueAt(row, 0)),
-					String.valueOf(table.getValueAt(row, 1)), Integer.parseInt(String.valueOf(table.getValueAt(row, 2))),
-					String.valueOf(table.getValueAt(row, 3)), String.valueOf(table.getValueAt(row, 4)));
+					String.valueOf(table.getValueAt(row, 1)),
+					Integer.parseInt(String.valueOf(table.getValueAt(row, 2))),
+					String.valueOf(table.getValueAt(row, 3)), singerId);
+			albumTableClicked = true;
 		} catch (NumberFormatException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -242,7 +296,8 @@ public class mainFrame extends JFrame {
 				String rows[] = new String[5];
 				rows[0] = result.getString(1);
 				rows[1] = result.getString(2);
-				rows[2] = result.getString(3);
+				String genderId = result.getString(3);
+				rows[2] = genderId.equals("1") ? "Nam" : "Nữ";
 				rows[3] = result.getString(4);
 				rows[4] = result.getString(5);
 				casiDTable.addRow(rows);
@@ -251,6 +306,37 @@ public class mainFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		casiTable.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				clickCaSiTable(casiTable);
+			}
+		});
 		casiTable.addKeyListener(new KeyListener() {
 
 			@Override
@@ -275,7 +361,7 @@ public class mainFrame extends JFrame {
 				}
 			}
 		});
-				
+
 		casiTable.getTableHeader().setReorderingAllowed(false);
 		casiTable.setToolTipText("Nhấn Enter đi tới màn hình cập nhật");
 		casiTable.setFillsViewportHeight(true);
@@ -306,21 +392,53 @@ public class mainFrame extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		baihatTable.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				clickBaiHatTable(baihatTable);
+			}
+		});
+
 		baihatTable.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -340,7 +458,7 @@ public class mainFrame extends JFrame {
 				}
 			}
 		});
-		
+
 		baihatTable.getTableHeader().setReorderingAllowed(false);
 		baihatTable.setToolTipText("Nhấn Enter đi tới màn hình cập nhật");
 		baihatTable.setFillsViewportHeight(true);
@@ -398,7 +516,7 @@ public class mainFrame extends JFrame {
 		albumInsert.addActionListener(l);
 		casiInsert.addActionListener(l);
 		baihatInsert.addActionListener(l);
-		
+
 		albumDelete.addActionListener(l);
 		casiDelete.addActionListener(l);
 		baihatDelete.addActionListener(l);

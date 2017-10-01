@@ -203,6 +203,7 @@ public class albumFrame extends JFrame {
 				String tencasi = (String)cbbCaSi.getSelectedItem();
 		        try {
 					macasi = new AlbumModel().getIdByValue(tencasi);
+					System.out.println(macasi);
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

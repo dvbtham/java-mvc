@@ -49,6 +49,11 @@ public class CaSiModel extends DbModel {
 		return db.GetIdByValue(query);
 	}
 	
+	public String getSingerIdByName(String name) {
+		String query = "select id from casi where tencasi = \"" + name + "\";";
+		return db.GetIdByValue(query);
+	}
+	
 	public String getNameById(String id) {
 		String sql = "SELECT tencasi FROM casi WHERE id = \"" + id + "\";";
 		return db.getNameById(sql, "tencasi");

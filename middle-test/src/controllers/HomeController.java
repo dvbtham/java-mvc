@@ -33,44 +33,58 @@ public class HomeController implements ActionListener {
 
 		case constants.HOME_ADD_CASI:
 			this.casiFrame.setVisible(true);
-			
+
 			break;
 
 		case constants.HOME_ADD_BAIHAT:
 			this.baihatFrame.setVisible(true);
-			
+
 			break;
 
 		case constants.HOME_DELETE_ALBUM:
-			String id = mainFrame.albumModel().getId();
-			if (!id.equals("0")) {
-				mainFrame.albumModel().Delete(id);
-				common.closeWindows.closeAll();
-				mainFrame.startFrame();
-			} else {
-				JOptionPane.showMessageDialog(null, "Vui lòng chọn album để xóa");
+			if (mainFrame.albumTableClicked) {
+				String id = mainFrame.albumModel().getId();
+				int option = JOptionPane.showConfirmDialog(mainFrame, "Bạn có chắc chắn muốn xóa album này?",
+						"Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+
+				if (option == JOptionPane.OK_OPTION) {
+					mainFrame.albumModel().Delete(id);
+					common.closeWindows.closeAll();
+					mainFrame.startFrame();
+				}
 			}
-						
+			else
+				JOptionPane.showMessageDialog(null, "Bạn chưa chọn album!!!");
+
 			break;
 
 		case constants.HOME_DELETE_CASI:
-			String casi_id = mainFrame.casiModel().getId();
-			if (!casi_id.equals("0")) {
-				mainFrame.casiModel().Delete(casi_id);
-				common.closeWindows.closeAll();
-				mainFrame.startFrame();
+			if (mainFrame.casiTableClicked) {
+				String casi_id = mainFrame.casiModel().getId();
+				int option = JOptionPane.showConfirmDialog(mainFrame, "Bạn có chắc chắn muốn xóa ca sĩ này?",
+						"Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+				if (option == JOptionPane.OK_OPTION) {
+					mainFrame.casiModel().Delete(casi_id);
+					common.closeWindows.closeAll();
+					mainFrame.startFrame();
+				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn ca sĩ để xóa");
 			}
-			
+
 			break;
 
 		case constants.HOME_DELETE_BAIHAT:
-			String baihat_id = mainFrame.baihatModel().getMabaihat();
-			if (!baihat_id.equals("0")) {
-				mainFrame.baihatModel().Delete(baihat_id);
-				common.closeWindows.closeAll();
-				mainFrame.startFrame();
+			
+			if (mainFrame.baihatTableClicked) {
+				String baihat_id = mainFrame.baihatModel().getMabaihat();
+				int option = JOptionPane.showConfirmDialog(mainFrame, "Bạn có chắc chắn muốn xóa bài hát này?",
+						"Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+				if (option == JOptionPane.OK_OPTION) {
+					mainFrame.baihatModel().Delete(baihat_id);
+					common.closeWindows.closeAll();
+					mainFrame.startFrame();
+				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn bài hát để xóa");
 			}
