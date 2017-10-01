@@ -55,13 +55,13 @@ public class DbModel {
 		return false;
 	}
 	
-	protected String GetIdByValue(String query) {
+	protected String GetIdByValue(String query, String key) {
 		ResultSet res = null;
 		try {
 			Statement stm = con.createStatement();
 			res = stm.executeQuery(query);
 			while(res.next()){				
-				return res.getString("id");
+				return res.getString(key);
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();

@@ -46,7 +46,11 @@ public class AlbumModel extends DbModel {
 
 	public String getIdByValue(String value) {
 		String query = "select id from casi where tencasi = \"" + value + "\";";
-		return db.GetIdByValue(query);
+		return db.GetIdByValue(query, "id");
+	}
+	public String getAlbumIdByName(String name) {
+		String query = "select id from album where tenalbum = \"" + name + "\";";
+		return db.GetIdByValue(query, "id");
 	}
 	public String getNameById(String id) {
 		String sql = "SELECT tenalbum FROM album WHERE id = \"" + id + "\";";

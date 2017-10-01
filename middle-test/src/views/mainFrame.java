@@ -226,9 +226,10 @@ public class mainFrame extends JFrame {
 	private void clickBaiHatTable(JTable table) {
 		int row = table.getSelectedRow();
 		try {
+			String albumName = String.valueOf(table.getValueAt(row, 3));
+			String albumId = new AlbumModel().getAlbumIdByName(albumName);
 			this.baihatModel = new BaiHatModel(String.valueOf(table.getValueAt(row, 0)),
-					String.valueOf(table.getValueAt(row, 1)), String.valueOf(table.getValueAt(row, 2)),
-					String.valueOf(table.getValueAt(row, 3)));
+					String.valueOf(table.getValueAt(row, 1)), String.valueOf(table.getValueAt(row, 2)),	albumId);
 			baihatTableClicked = true;
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -385,7 +386,13 @@ public class mainFrame extends JFrame {
 				rows[0] = result.getString(1);
 				rows[1] = result.getString(2);
 				rows[2] = result.getString(3);
-				rows[3] = result.getString(4);
+				String albumId = result.getString(4);
+				try {
+					rows[3] = new AlbumModel().getNameById(albumId);
+				} catch (ClassNotFoundException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 				baihatDTable.addRow(rows);
 			}
 		} catch (SQLException e) {

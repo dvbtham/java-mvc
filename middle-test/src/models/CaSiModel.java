@@ -46,12 +46,12 @@ public class CaSiModel extends DbModel {
 	
 	public String getIdByValue(String value) {
 		String query = "select id from album where tenalbum = \"" + value + "\";";
-		return db.GetIdByValue(query);
+		return db.GetIdByValue(query, "id");
 	}
 	
 	public String getSingerIdByName(String name) {
 		String query = "select id from casi where tencasi = \"" + name + "\";";
-		return db.GetIdByValue(query);
+		return db.GetIdByValue(query, "id");
 	}
 	
 	public String getNameById(String id) {
